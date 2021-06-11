@@ -1,20 +1,11 @@
-
 /*
-
 ============================================================================
-
 Name        : replacementselectionsort.c
-
 Author      :
-
  Version     :
-
 Copyright   : Your copyright notice
-
 Description : Hello World in C, Ansi-style
-
 ============================================================================
-
 */
 
  
@@ -95,7 +86,7 @@ int main(void) {
 
              for(i=0; i<HEAP_SIZE; i++){
 
-                    if(current_heap_active_status[i]){
+                    if(current_heap_active_status[i] == 1){
 
                            all_inactive = 0;
 
@@ -132,24 +123,28 @@ int main(void) {
                            // all heap elements turned into active (at not first iteration)
 
                            /*if(element_counter >= ELEMENT_COUNT)
-
                                   finished = 1;
-
                            else*/{
 
                                   //bir sonraki buffer'a gondermeye baslanmak uzere heap'teki elemanlar active yapilir.
 
                                   buffers[buffer_counter][in_buffer_counter] = -1;//bir onceki buffer sonlandirilir.
 
-                                  buffer_counter++;
 
                                   in_buffer_counter = 0;
+                                  
+                                  int some_actives_exist = 0;
 
                                   for(i = 0; i < HEAP_SIZE; i++){
 
+                                    if(current_heap_active_status[i] != -1)
                                         current_heap_active_status[i] = 1;
+                                    else
+                                        some_actives_exist = 1;
 
                                   }
+                                  //if(some_actives_exist)
+                                    buffer_counter++;
 
                                   last_sent_to_buffer = -100000;
 
@@ -177,7 +172,7 @@ int main(void) {
 
              for(i = 0; i < HEAP_SIZE; i++){
 
-                    if(current_heap_active_status[i] && current_heap[i] < min_of_heap){
+                    if(current_heap_active_status[i] == 1 && current_heap[i] < min_of_heap){
 
                            min_of_heap = current_heap[i];
 
@@ -188,7 +183,14 @@ int main(void) {
              }
 
  
+            printf("heap: %d (active:%d), %d (active:%d), %d (active:%d) min: %d\n", current_heap[0], current_heap_active_status[0], current_heap[1], current_heap_active_status[1], current_heap[2], current_heap_active_status[2], min_of_heap);
 
+
+            if(min_of_heap_index == -1){
+                finished = 1;
+                //buffer_counter++;
+                continue;
+            }
  
 
              // if the selected element is less than all of the values in the current buffer
@@ -265,7 +267,7 @@ int main(void) {
 
  
 
-                           current_heap_active_status[min_of_heap_index] = 0;
+                           current_heap_active_status[min_of_heap_index] = -1;
 
                     }
 
@@ -298,5 +300,3 @@ int main(void) {
        return EXIT_SUCCESS;
 
 }
-
- 
